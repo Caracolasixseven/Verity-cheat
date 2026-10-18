@@ -76,17 +76,6 @@ namespace addresses::globals {
 			swap_chain = memory::read<std::uintptr_t> (second + 0x170);
 		}
 
-		// 3. Comprobación (Si los PATTERN fallan, esto hará que el cheat no arranque)
-		if (
-			!csgo_input || !entity_list || !local_player_controller || !global_vars || !view_matrix || !game_rules || 
-			!light_data_queue || !particle_manager || !game_event_manager || !game_trace_manager || !render_game_system || 
-			!mem_alloc || !swap_chain || !material_manager || !game_entity_system || !weapon_recoil_data || !hud || 
-			!prediction_seed || !simulation_player || !prediction_player || !planted_c4 || !item_system || !net_client ||
-			!frame_input_ring_idx || !frame_input_ring_base || !prediction_state
-			) {
-			return false;
-		}
-
 		return true;
 	}
 
