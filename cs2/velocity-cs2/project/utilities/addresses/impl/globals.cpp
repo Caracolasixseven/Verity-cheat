@@ -8,7 +8,7 @@ namespace addresses::globals {
 
 	bool initialize () {
 		source2client              = INTERFACE_ ("Source2Client002");
-		panorama = INTERFACE_ ("PanoramaUIEngine001");
+		panorama                   = INTERFACE_ ("PanoramaUIEngine001");
 		source2engine_to_client    = INTERFACE_ ("Source2EngineToClient001");
 		scene_system               = INTERFACE_ ("SceneSystem_002");
 		material_system            = INTERFACE_ ("VMaterialSystem2_001");
@@ -24,7 +24,6 @@ namespace addresses::globals {
 		file_system                = INTERFACE_ ("VFileSystem017");
 
 		// --- OFFSETS ESTÁTICOS (15/10/2026) ---
-		// 1. Declaramos la base de client.dll para que no falle
 		auto client = modules::client;
 
 		csgo_input              = client + 0x257B640; // dwCSGOInput
@@ -36,7 +35,6 @@ namespace addresses::globals {
 		planted_c4              = client + 0x24CB3C0; // dwPlantedC4
 		weapon_recoil_data      = client + 0x2562A18; // dwSensitivity
 		
-		// 2. Los patrones que se mantienen
 		light_data_queue        = PATTERN (patterns::light_data_queue);
 		particle_manager        = PATTERN (patterns::particle_manager);
 		game_event_manager      = PATTERN (patterns::game_event_manager);
@@ -59,23 +57,19 @@ namespace addresses::globals {
 
 		{
 			const auto storage = PATTERN (patterns::swap_chain_storage);
-			if (!storage) {
-				return false;
+			// ELIMINAMOS EL return false PARA QUE EL CHEAT NO SE APAGUE
+			if (storage) {
+				const auto first = memory::read<std::uintptr_t> (storage);
+				if (first) {
+					const auto second = memory::read<std::uintptr_t> (first);
+					if (second) {
+						swap_chain = memory::read<std::uintptr_t> (second + 0x170);
+					}
+				}
 			}
-
-			const auto first = memory::read<std::uintptr_t> (storage);
-			if (!first) {
-				return false;
-			}
-
-			const auto second = memory::read<std::uintptr_t> (first);
-			if (!second) {
-				return false;
-			}
-
-			swap_chain = memory::read<std::uintptr_t> (second + 0x170);
 		}
 
+		// Forzamos el retorno a true para que el cheat arranque
 		return true;
 	}
 
