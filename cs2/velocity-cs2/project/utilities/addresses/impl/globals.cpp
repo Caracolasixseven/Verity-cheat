@@ -35,7 +35,6 @@ namespace addresses::globals {
 		planted_c4              = client + 0x24CB3C0; // dwPlantedC4
 		weapon_recoil_data      = client + 0x2562A18; // dwSensitivity
 		
-		// --- PATRONES ---
 		light_data_queue        = PATTERN (patterns::light_data_queue);
 		particle_manager        = PATTERN (patterns::particle_manager);
 		game_event_manager      = PATTERN (patterns::game_event_manager);
@@ -58,7 +57,6 @@ namespace addresses::globals {
 
 		{
 			const auto storage = PATTERN (patterns::swap_chain_storage);
-			// Ya no hay return false. Si falla, swap_chain se queda en 0 y el cheat sigue.
 			if (storage) {
 				const auto first = memory::read<std::uintptr_t> (storage);
 				if (first) {
@@ -70,7 +68,6 @@ namespace addresses::globals {
 			}
 		}
 
-		// Ya no hay comprobación final. El cheat siempre retorna true para forzar la carga.
 		return true;
 	}
 
